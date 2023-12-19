@@ -1,12 +1,13 @@
-import React,{useEffect} from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
+import Layout from '../components/Layout';
 
 const Home = () => {
 
   const getUserData = async () => {
     try {
-      const res= await axios.post('/api/v1/user/getUserData',{},{
-        headers:{
+      const res = await axios.post('/api/v1/user/getUserData', {}, {
+        headers: {
           "Authorization": "Bearer " + localStorage.getItem('token')
         }
       })
@@ -21,7 +22,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div>Home</div>
+    <Layout>
+      <div>Home</div>
+    </Layout>
   )
 }
 
