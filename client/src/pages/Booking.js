@@ -33,32 +33,63 @@ function Booking() {
     }
     const handleBooking = async () => {
         try {
-          dispatch(showLoading());
-          const res = await axios.post(
-            "/api/v1/user/book-appointment",
-            {
-              doctorId: params.doctorId,
-              userId: user._id,
-              doctorInfo: doctor,
-              userInfo: user,
-              date: date,
-              time: time,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
+            dispatch(showLoading());
+            const res = await axios.post(
+                "/api/v1/user/book-appointment",
+                {
+                    doctorId: params.doctorId,
+                    userId: user._id,
+                    doctorInfo: doctor,
+                    userInfo: user,
+                    date: date,
+                    time: time,
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                }
+            );
+            dispatch(hideLoading());
+            if (res.data.success) {
+                message.success(res.data.message);
             }
-          );
-          dispatch(hideLoading());
-          if (res.data.success) {
-            message.success(res.data.message);
-          }
         } catch (error) {
-          dispatch(hideLoading());
-          console.log(error);
+            dispatch(hideLoading());
+            console.log(error);
         }
-      };
+    };
+
+    const handleAvailability = async () => {
+        try {
+            setIsAvailable(true);
+            if(!date && !time){
+                return alert("Date and time required");
+            }
+            dispatch(showLoading());
+            const res = await axios.post("/api/v1/user/check-booking-availability",
+                {  
+                    doctorId:params._id,date,time
+                }, {
+                    headers:{
+                        Authorization:`Bearer ${localStorage.getItem('token')}`
+                    }
+            });
+            dispatch(hideLoading());
+            if(res.data.success){
+                setIsAvailable(true);
+                message.success(res.data.message);
+            }
+            else{
+                message.error(res.data.message);
+            }
+        }
+        catch (error) {
+            dispatch(hideLoading());
+            console.log(error);
+            message.error(error);
+        }
+    }
 
     useEffect(() => {
         getDoctorData();
@@ -93,7 +124,7 @@ function Booking() {
                                     setTime(moment(value).format("HH:mm"));
                                 }}
                             />
-                            <button className="btn btn-primary mt-2">
+                            <button className="btn btn-primary mt-2" onClick={handleAvailability}>
                                 Check Availability
                             </button>
                             <button className="btn btn-dark mt-2" onClick={handleBooking}>
