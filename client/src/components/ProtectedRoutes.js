@@ -12,7 +12,7 @@ function ProtectedRoute({ children }) {
     const getUser = async () => {
         try {
             dispatch(showLoading());
-            const res = await axios.post('api/v1/user/getUserData', { token: localStorage.getItem('token') },
+            const res = await axios.post('/api/v1/user/getUserData', { token: localStorage.getItem('token') },
                 {
                     headers: {
                         "Authorization": "Bearer " + localStorage.getItem("token")

@@ -2,6 +2,7 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const doctorModel = require("../models/doctorModel");
+const appointmentModel = require("../models/appointmentModel");
 
 const registerController = async (req, res) => {
     try {
@@ -117,13 +118,44 @@ const deleteAllNotificationController = async (req, res) => {
         user.seenNotification = [];
         const updatedUser = await user.save();
         user.password = undefined;
-        res.status(200).send({success:true,message:"All notifications are deleted",data:updatedUser});
+        res.status(200).send({ success: true, message: "All notifications are deleted", data: updatedUser });
     }
     catch (error) {
         console.log(error);
-        res.status(500).send({success:false,message:"Unable to delete notifications"},error);
+        res.status(500).send({ success: false, message: "Unable to delete notifications" }, error);
+    }
+}
+
+const getAllDoctorsController = async (req, res) => {
+    try {
+        const doctors = await doctorModel.find({ status: "approved" });
+        res.status(200).send({ success: true, message: "All doctors", data: doctors });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, message: "Error fetching all dcotors", error })
+    }
+}
+
+const bookappointmentController = async (req, res) => {
+    try {
+        req.body.status = "pending"
+        const newappointment = new appointmentModel(req.body);
+        await newappointment.save();
+        const user = await userModel.findOne({ _id: req.body.doctorInfo.userId });
+        user.notification.push({
+            type: `New-appoinmet-request`,
+            message: `New appoinmet request from ${req.body.userInfo.name}`,
+            onClickPath: "/user/apooinments"
+        });
+        await user.save();
+        res.status(200).send({ success: true, message: "appointment booked successfully" });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, message: "Error booking appointment", error })
     }
 }
 
 
-module.exports = { loginController, registerController, authController, applyDoctorController, getAllNotificationController, deleteAllNotificationController }
+module.exports = { loginController, registerController, authController, applyDoctorController, getAllNotificationController, deleteAllNotificationController, getAllDoctorsController, bookappointmentController }

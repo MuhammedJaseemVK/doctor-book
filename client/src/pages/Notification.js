@@ -4,10 +4,12 @@ import { Tabs, message } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 import { hideLoading, showLoading } from '../redux/features/alertSlice';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Notification = () => {
     const { user } = useSelector(state => state.user);
     const dispatch = useDispatch();
+    const navigate=useNavigate();
 
     const handleMarkAllRead = async () => {
         try {
@@ -64,7 +66,7 @@ const Notification = () => {
                     </div>
                     {
                         user?.notification.map((notificationMsg) => (
-                            <div className="card" onClick={notificationMsg.onClickPath}>
+                            <div className="card" onClick={() => navigate(notificationMsg.onClickPath)}>
                                 <div className="card-text">
                                     {notificationMsg.message}
                                 </div>
@@ -74,11 +76,11 @@ const Notification = () => {
                 </Tabs.Pane>
                 <Tabs.Pane tab="Read" key={1}>
                     <div className="d-flex justify-content-end">
-                        <h4 className="p-2 text-center" style={{cursor:'pointer'}} onClick={handleDeleteAllRead}>Delete All Read</h4>
+                        <h4 className="p-2 text-center" style={{ cursor: 'pointer' }} onClick={handleDeleteAllRead}>Delete All Read</h4>
                     </div>
                     {
                         user?.seenNotification.map((notificationMsg) => (
-                            <div className="card" onClick={notificationMsg.onClickPath}>
+                            <div className="card" onClick={() => navigate(notificationMsg.onClickPath)}>
                                 <div className="card-text">
                                     {notificationMsg.message}
                                 </div>

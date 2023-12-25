@@ -1,16 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Layout from '../components/Layout';
+import { Row } from 'antd';
+import DoctorList from '../components/DoctorList';
 
 const Home = () => {
 
-  const getUserData = async () => {
+  const [doctors, setDoctors] = useState(null);
+  const getAllDoctors = async () => {
     try {
-      const res = await axios.post('/api/v1/user/getUserData', {}, {
+      const res = await axios.get('/api/v1/user/get-all-doctors', {
         headers: {
           "Authorization": "Bearer " + localStorage.getItem('token')
         }
-      })
+      });
+      if (res.data.success) {
+        setDoctors(res.data.data);
+      }
     }
     catch (error) {
       console.log(error);
@@ -18,12 +24,17 @@ const Home = () => {
   }
 
   useEffect(() => {
-    getUserData();
+    getAllDoctors();
   }, []);
 
   return (
     <Layout>
-      <div>Home</div>
+      <h1 className="text-center">Home</h1>
+      <Row>
+        {
+          doctors && (doctors.map((doctor)=>(<DoctorList doctor={doctor} />)))
+        }
+      </Row>
     </Layout>
   )
 }
