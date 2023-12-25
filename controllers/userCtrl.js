@@ -147,9 +147,9 @@ const bookappointmentController = async (req, res) => {
         await newappointment.save();
         const user = await userModel.findOne({ _id: req.body.doctorInfo.userId });
         user.notification.push({
-            type: `New-appoinmet-request`,
-            message: `New appoinmet request from ${req.body.userInfo.name}`,
-            onClickPath: "/user/apooinments"
+            type: `New-appointmet-request`,
+            message: `New appoitnmet request from ${req.body.userInfo.name}`,
+            onClickPath: "/user/appointments"
         });
         await user.save();
         res.status(200).send({ success: true, message: "appointment booked successfully" });
