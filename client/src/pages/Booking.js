@@ -104,7 +104,7 @@ function Booking() {
                         <h4>
                             Dr.{doctor.firstName} {doctor.lastName}
                         </h4>
-                        <h4>Fees : {doctor.feesPerCunsaltation}</h4>
+                        <h4>Fees : {doctor.feePerCunsaltation}</h4>
                         <h4>
                             Timings : {doctor.timings && doctor.timings[0]} -{" "}
                             {doctor.timings && doctor.timings[1]}{" "}

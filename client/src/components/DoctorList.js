@@ -17,7 +17,7 @@ function DoctorList({ doctor }) {
                         <b>Experience</b> {doctor.experience}
                     </p>
                     <p>
-                        <b>Fees Per Cunsaltation</b> {doctor.feesPerCunsaltation}
+                        <b>Fees Per Cunsaltation</b> {doctor.feePerCunsaltation}
                     </p>
                     <p>
                         <b>Timings</b> {doctor.timings[0]} - {doctor.timings[1]}
