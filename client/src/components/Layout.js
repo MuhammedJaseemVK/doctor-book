@@ -65,7 +65,7 @@ function Layout({ children }) {
                                 <Badge count={user && user.notification.length} onClick={() => navigate('/notification')}>
                                     <i className='fa-solid fa-bell'></i>
                                 </Badge>
-                                <Link to='/profile' >{user?.email}</Link>
+                                {user?.name}
                             </div>
                         </div>
                         <div className="body">{children}</div>
